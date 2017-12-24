@@ -13,11 +13,11 @@ class HttpRequest(object):
         request_line = split_request[0].split(' ')
 
         # Set url value.
-        self.url = request_line[1][1:]
+        self._url = request_line[1][1:]
 
         # Set HTTP type value.
-        self.http_type = request_line[2]
-        self.headers = {}
+        self._http_type = request_line[2]
+        self._headers = {}
 
         # Save all the headers in a dictionary.
         for header in split_request[1:]:
@@ -25,21 +25,29 @@ class HttpRequest(object):
             # Check that header
             if ':' in header:
                 split_header = header.split(': ', 1)
-                self.headers[split_header[0]] = split_header[1]
+                self._headers[split_header[0]] = split_header[1]
 
     def get_url(self):
         """
         Url getter.
         :return: url
         """
-        return self.url
+        return self._url
+
+    def set_url(self, url):
+        """
+        Url setter.
+        :param url: url
+        :return: None
+        """
+        self._url = url
 
     def get_http_type(self):
         """
         HTTP type getter.
         :return: HTTP type
         """
-        return self.http_type
+        return self._http_type
 
     def get_header(self, header_name):
         """
@@ -48,26 +56,33 @@ class HttpRequest(object):
         :return: header value
         """
         # Check if header exists in the dictionary.
-        if header_name in self.headers:
-            return self.headers[header_name]
+        if header_name in self._headers:
+            return self._headers[header_name]
         else:
             return None
 
     def is_static_request(self):
         """
-        Checks if the request static.
+        Checks if the request is static.
         :return: boolean
         """
-        return self.url.startswith("Files")
+        return self._url.startswith("Files")
+
+    def is_dynamic_request(self):
+        """
+        Checks if the request is dynamic
+        :return: boolean
+        """
+        return self._url.startswith("homepage")
 
 
 class HttpResponse(object):
     def __init__(self, http_type, status_code, last_modified, data):
-        self.http_type = http_type
-        self.status_code = status_code
-        self.last_modified = last_modified
+        self._http_type = http_type
+        self._status_code = status_code
+        self._last_modified = last_modified
         # self.content_type = content_type
-        self.data = data
+        self._data = data
 
     def __str__(self):
         switcher = {
@@ -75,14 +90,14 @@ class HttpResponse(object):
             304: "Not Modified",
             404: "Not Found"
         }
-        status_text = switcher.get(self.status_code)
+        status_text = switcher.get(self._status_code)
 
-        if self.data is None:
-            self.data = ''
+        if self._data is None:
+            self._data = ''
 
-        response = '{0} {1} {2}\r\nLast-Modified: {3}\r\n\r\n{4}'.format(self.http_type,
-                                                                         self.status_code,
+        response = '{0} {1} {2}\r\nLast-Modified: {3}\r\n\r\n{4}'.format(self._http_type,
+                                                                         self._status_code,
                                                                          status_text,
-                                                                         self.last_modified,
-                                                                         self.data)
+                                                                         self._last_modified,
+                                                                         self._data)
         return response
