@@ -60,14 +60,14 @@ def get_articles(num_of_objects):
     template = get_template("Files/template.html")
     resource = ""
 
-    for i in range(1, num_of_objects):
+    for i in range(1, num_of_objects + 1):
         # Fill the template with the article's values.
         temp_template = template
         article = get_article(i)
-        temp_template.replace("Title", article["title"])
-        temp_template.replace("link", article["link"])
-        temp_template.replace('img src=""', 'img src="{0}"'.format(article["img"]))
-        temp_template.replace("Content", article["content"])
+        temp_template = temp_template.replace("Title", article["title"])
+        temp_template = temp_template.replace("link", article["link"])
+        temp_template = temp_template.replace('img src=""', 'img src="{0}"'.format(article["img"]))
+        temp_template = temp_template.replace("Content", article["content"])
 
         # Add the article to the final result.
         resource += temp_template + '\n'

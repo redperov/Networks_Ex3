@@ -26,7 +26,7 @@ ARTICLE1 = {
 }
 
 ARTICLE2 = {
-  'link' : 'http://www.ynet.co.il/articles/0,7340,L-4713571,00.html',
+  'link' : 'http://www.ynet.co.il/articles/0,7340,L-5045541,00.html',
   'img' : 'https://images1.ynet.co.il/PicServer5/2017/11/23/8172884/817287001000100980704no.jpg',
   'title' : '"כ"ט בנובמבר: "שמחה שנמשכה ימים ולילות,￼ הייתה אופוריה"',
   'content' : 'ב-1947 הם היו ילדים או צעירים￼￼￼￼￼￼ בתחילת דרכם, אבל את היום הגורלי ב-29 בנובמבר הם לא\
