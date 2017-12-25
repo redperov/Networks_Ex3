@@ -49,7 +49,7 @@ def get_template(path):
 
         # Get the template.
         template = find_between(template_container, '<div class="row">', '</div><!--/.row-->')
-
+        template = '<div class="row">' + template + '</div><!--/.row-->'
         return template
 
     except IOError:
