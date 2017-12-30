@@ -29,6 +29,8 @@ def client_handler(client, address):
 
         except socket.timeout:
             stop = True
+        except IndexError:
+            return
 
     print 'Client disconnected\n'
     try:
