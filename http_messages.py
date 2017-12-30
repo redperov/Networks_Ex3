@@ -82,7 +82,7 @@ class HttpResponse(object):
        Keeps the necessary values in an organized form.
        """
 
-    def __init__(self, http_type, status_code, last_modified, data):
+    def __init__(self, http_type, url, status_code, last_modified, data):
         """
         Constructor.
         :param http_type: HTTP type
@@ -91,15 +91,11 @@ class HttpResponse(object):
         :param data: data
         """
         self._http_type = http_type
+        self._url = url
         self._status_code = status_code
         self._last_modified = last_modified
+        self._length = 0
         self._data = data
-
-    def __str__(self):
-        """
-        Parses the HTTP response to a string.
-        :return: string
-        """
 
         # Status code switch case.
         switcher = {
@@ -107,15 +103,46 @@ class HttpResponse(object):
             304: "Not Modified",
             404: "Not Found"
         }
-        status_text = switcher.get(self._status_code)
+        self._status_text = switcher.get(self._status_code)
 
         # Check if data is null.
         if self._data is None:
             self._data = ''
+        else:
+            self._length = len(self._data)
 
-        response = '{0} {1} {2}\r\nLast-Modified: {3}\r\n\r\n{4}'.format(self._http_type,
-                                                                         self._status_code,
-                                                                         status_text,
-                                                                         self._last_modified,
-                                                                         self._data)
+        self._content_type = self._determine_content_type()
+
+    def _determine_content_type(self):
+        """
+        Determines the content type of the object's url
+        :return: content type
+        """
+        ending = self._url.split(".")[-1]
+
+        if ending == 'jpg' or ending == 'png':
+            content_type = 'image/{0}'.format(ending)
+        elif ending == 'js':
+            content_type = 'application/javascript'
+        elif ending == 'css':
+            content_type = 'text/css'
+        else :
+            content_type = 'text/html'
+
+        return content_type
+
+    def __str__(self):
+        """
+        Parses the HTTP response to a string.
+        :return: string
+        """
+
+        response = '{0} {1} {2}\r\nLast-Modified: {3}\r\nConnection: keep-alive\r\nContent-Length: {4}\r\nKeep-Alive: timeout=10, max=100\r\nContent-Type: {5}\r\n\r\n{6}'.format(
+            self._http_type,
+            self._status_code,
+            self._status_text,
+            self._last_modified,
+            self._length,
+            self._content_type,
+            self._data)
         return response

@@ -159,6 +159,20 @@ def handle_dynamic_request(http_request):
             return None
 
 
+def try_removing_url_query(url):
+    """
+    Removes query from the url.
+    :param url: url
+    :return: clean url
+    """
+    # Check if url contains a query.
+    if '?' in url:
+        clean_url = url[:url.find('?')]
+        return clean_url
+    else:
+        return url
+
+
 def handle_request(request):
     """
     User request handler.
@@ -212,8 +226,20 @@ def handle_request(request):
         if resource is not None:
             status_code = 200
         else:
-            status_code = 404
 
-    http_response = HttpResponse(http_request.get_http_type(), status_code, date, resource)
+            # Try removing the query from the url, if it exists.
+            temp_url = try_removing_url_query(http_request.get_url())
+            http_request.set_url(temp_url)
+
+            # Handle a static request.
+            resource = handle_static_request(http_request)
+
+            # Check if resource was found.
+            if resource is not None:
+                status_code = 200
+            else:
+                status_code = 404
+
+    http_response = HttpResponse(http_request.get_http_type(), http_request.get_url(), status_code, date, resource)
 
     return str(http_response)
