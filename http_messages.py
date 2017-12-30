@@ -77,14 +77,31 @@ class HttpRequest(object):
 
 
 class HttpResponse(object):
+    """
+       The class represents an HTTP response.
+       Keeps the necessary values in an organized form.
+       """
+
     def __init__(self, http_type, status_code, last_modified, data):
+        """
+        Constructor.
+        :param http_type: HTTP type
+        :param status_code: status code
+        :param last_modified: last modified
+        :param data: data
+        """
         self._http_type = http_type
         self._status_code = status_code
         self._last_modified = last_modified
-        # self.content_type = content_type
         self._data = data
 
     def __str__(self):
+        """
+        Parses the HTTP response to a string.
+        :return: string
+        """
+
+        # Status code switch case.
         switcher = {
             200: "OK",
             304: "Not Modified",
@@ -92,6 +109,7 @@ class HttpResponse(object):
         }
         status_text = switcher.get(self._status_code)
 
+        # Check if data is null.
         if self._data is None:
             self._data = ''
 

@@ -4,13 +4,13 @@ from articles import get_article
 
 
 def get_resource(path):
+    """
+    Gets the data from a static resource.
+    :param path: the resource path
+    :return: resource
+    """
     # Try reading data from the file.
     try:
-        # # If content type is image.
-        # if content_type == "image":
-        #     reading_type = "rb"
-        # else:
-        #     reading_type = "r"
         with open(path, "rb") as resource:
             data = resource.read()
 
@@ -21,6 +21,11 @@ def get_resource(path):
 
 
 def handle_static_request(http_request):
+    """
+    Static request handler.
+    :param http_request: HTTP request
+    :return: resource
+    """
     # Get the path to the resource.
     path = http_request.get_url()
 
@@ -31,15 +36,28 @@ def handle_static_request(http_request):
 
 
 def find_between(s, first, last):
+    """
+    Finds a substring between two substrings of a string.
+    :param s: the main string
+    :param first: the first substring
+    :param last: the second substring
+    :return: middle substring
+    """
     try:
         start = s.index(first) + len(first)
         end = s.index(last, start)
         return s[start:end]
+
     except ValueError:
         return ""
 
 
 def get_template(path):
+    """
+    Gets the dynamic template data from a file.
+    :param path: template file path
+    :return: template
+    """
     try:
         with open(path, "rb") as template_file:
             text = template_file.read()
@@ -57,13 +75,22 @@ def get_template(path):
 
 
 def get_articles(num_of_objects):
+    """
+    Gets articles according to the number requested.
+    :param num_of_objects: number of articles
+    :return: articles
+    """
     template = get_template("Files/template.html")
     resource = ""
 
     for i in range(1, num_of_objects + 1):
-        # Fill the template with the article's values.
+
         temp_template = template
+
+        # Get article with id i
         article = get_article(i)
+
+        # Fill the template with the article's values.
         temp_template = temp_template.replace("Title", article["title"])
         temp_template = temp_template.replace("link", article["link"])
         temp_template = temp_template.replace('img src=""', 'img src="{0}"'.format(article["img"]))
@@ -76,7 +103,12 @@ def get_articles(num_of_objects):
 
 
 def add_articles_to_file(path, articles):
-
+    """
+    Fills the articles in the dynamic template.
+    :param path: template file path
+    :param articles: articles to insert
+    :return: html file with articles
+    """
     try:
         with open(path, "rb") as template_file:
             text = template_file.read()
@@ -94,9 +126,15 @@ def add_articles_to_file(path, articles):
 
 
 def handle_dynamic_request(http_request):
+    """
+    Dynamic request handler.
+    :param http_request: HTTP request
+    :return: resource
+    """
     url = http_request.get_url()
     real_path = "Files/template.html"
 
+    # Check if a static homepage is requested.
     if url == "homepage":
         resource = get_resource(real_path)
         return resource
@@ -112,6 +150,7 @@ def handle_dynamic_request(http_request):
             # Get the articles.
             articles = get_articles(num_of_objects)
 
+            # Fill the template with the articles.
             resource = add_articles_to_file(real_path, articles)
 
             return resource
@@ -121,6 +160,11 @@ def handle_dynamic_request(http_request):
 
 
 def handle_request(request):
+    """
+    User request handler.
+    :param request: request
+    :return: HTTP response
+    """
     http_request = HttpRequest(request)
     resource = None
     status_code = None

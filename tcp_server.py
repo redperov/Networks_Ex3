@@ -20,21 +20,3 @@ while True:
 
     print 'Client disconnected\n'
     client_socket.close()
-
-# client_socket.send("<html><body><h1>Hello</h1></body></html>")
-# data = client_socket.recv(1024)
-
-
-# print 'Client disconnected'
-# client_socket.close()
-
-"""
-TODO
-To send an image:
-open(path, "rb") as file
-    file.read()
-also, if needed add Content-type: image
-
-To handle hebrew add at top of the page:
-# coding=utf-8
-"""

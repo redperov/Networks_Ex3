@@ -2,6 +2,11 @@
 
 
 def get_article(num_of_article):
+    """
+    Article getter.
+    :param num_of_article: article number
+    :return: article
+    """
     switcher = {
         1: ARTICLE1,
         2: ARTICLE2,
