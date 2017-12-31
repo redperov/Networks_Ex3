@@ -117,7 +117,7 @@ def add_articles_to_file(path, articles):
         template = get_template(path)
 
         # Replace the template in the text with the articles.
-        resource = text.replace(template, articles)  # TODO not sure this will work
+        resource = text.replace(template, articles)
 
         return resource
 
@@ -188,7 +188,7 @@ def handle_request(request):
     if http_request.get_header("If-Modified-Since") is not None:
         status_code = 304
 
-    elif http_request.get_url() == "favicon.ico":  # TODO if not needed because of the last else, remove it
+    elif http_request.get_url() == "favicon.ico":  # if favicon.ico is requested, return 404
         status_code = 404
 
     elif http_request.is_static_request():  # if a static request

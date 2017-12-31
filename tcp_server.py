@@ -14,15 +14,15 @@ def client_handler(client, address):
 
     while not stop:
         try:
-            client.settimeout(3)
+            client.settimeout(5)
 
             # Receive a request.
             request = client.recv(1024)
-            print 'Received:\n', request
+            # print 'Received:\n', request
 
             # Handle the request.
             response = handle_request(request)
-            print 'Response to ', address, ':\n', response, '\n'
+            # print 'Response to ', address, ':\n', response, '\n'
 
             # Send the response.
             client.send(response)
@@ -32,7 +32,7 @@ def client_handler(client, address):
         except IndexError:
             return
 
-    print 'Client disconnected\n'
+    # print 'Client disconnected\n'
     try:
         client.close()
     except socket.error:
@@ -51,7 +51,7 @@ if __name__ == '__main__':
     # Keep accepting new connections.
     while True:
         client_socket, client_address = server.accept()
-        print 'Connection from: ', client_address
+        # print 'Connection from: ', client_address
 
         # Handle client in a separate thread.
         thread.start_new_thread(client_handler, (client_socket, client_address))
